@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  development:
+    build: ./.devcontainer
+    command: tail -F /dev/null
+    volumes:
+      - .:/code
+      - development-node_modules:/code/node_modules
+
+volumes:
+  development-node_modules:
