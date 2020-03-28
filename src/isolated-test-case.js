@@ -1,10 +1,16 @@
 const { BigQuery } = require("@google-cloud/bigquery");
+const OpsStack = require("./ops-stack/ops-stack");
 const { v4 } = require("uuid");
 
 class IsolatedTestCase {
   constructor() {
-    this.bigQuery = new BigQuery();
-    this.uuid = v4();
+    this._bigQuery = new BigQuery();
+    this._uuid = v4();
+    this._cleanUpStack = new OpsStack();
+  }
+
+  getUuid() {
+    return this._uuid;
   }
 
   async runQuery(query, datasetId) {
@@ -13,20 +19,24 @@ class IsolatedTestCase {
       location: "EU",
       defaultDataset: { datasetId: this._withUniqueId(datasetId) }
     };
-    const [job] = await this.bigQuery.createQueryJob(options);
-    console.log(`Job ${job.id} started.`);
-
+    const [job] = await this._bigQuery.createQueryJob(options);
     const [rows] = await job.getQueryResults();
-
-    const results = [];
-    rows.forEach(row => results.push(row));
-    return results;
+    return rows.reduce((rows, row) => [...rows, row], []);
   }
 
   async createDataset(id) {
-    await this.bigQuery.createDataset(this._withUniqueId(id), {
+    await this._bigQuery.createDataset(this._withUniqueId(id), {
       location: "EU"
     });
+    this._cleanUpStack.addOperation(async () => {
+      this.deleteDataset(id);
+    });
+  }
+
+  async deleteDataset(id) {
+    await this._bigQuery
+      .dataset(this._withUniqueId(id))
+      .delete({ force: true });
   }
 
   async createTableUsingTemplate(
@@ -35,12 +45,12 @@ class IsolatedTestCase {
     templateTableId,
     templateDatasetId
   ) {
-    const [templateTable] = await this.bigQuery
+    const [templateTable] = await this._bigQuery
       .dataset(templateDatasetId)
       .table(templateTableId)
       .get();
 
-    await this.bigQuery
+    await this._bigQuery
       .dataset(this._withUniqueId(datasetId))
       .createTable(tableId, {
         schema: templateTable.metadata.schema,
@@ -49,14 +59,18 @@ class IsolatedTestCase {
   }
 
   async populateTable(tableId, datasetId, rows) {
-    await this.bigQuery
+    await this._bigQuery
       .dataset(this._withUniqueId(datasetId))
       .table(tableId)
       .insert(rows);
   }
 
+  async cleanUp() {
+    await this._cleanUpStack.perform();
+  }
+
   _withUniqueId(id) {
-    const base64Uuid = Buffer.from(this.uuid).toString("base64");
+    const base64Uuid = Buffer.from(this._uuid).toString("base64");
     return `${base64Uuid}_${id}`;
   }
 }
