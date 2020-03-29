@@ -11,7 +11,7 @@ module.exports = class OpsStack {
   }
 
   async perform() {
-    const opsPromises = this._ops.map(fn => fn());
+    const opsPromises = this._ops.map((fn) => fn());
     return await Promise.all(opsPromises);
   }
 };

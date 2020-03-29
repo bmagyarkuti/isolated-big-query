@@ -1,7 +1,7 @@
 const IsolatedBigQuery = require("../../src/isolated-big-query");
 const config = require("config");
 
-module.exports = row => {
+module.exports = (row) => {
   let isolatedBigQuery;
 
   beforeEach(function () {

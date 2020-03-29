@@ -1,4 +1,4 @@
-module.exports = n =>
-  new Promise(resolve => {
+module.exports = (n) =>
+  new Promise((resolve) => {
     setTimeout(() => resolve(), n);
   });

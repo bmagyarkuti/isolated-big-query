@@ -12,7 +12,7 @@ class IsolatedBigQuery {
 
   async createDataset(id) {
     await this._bigQuery.createDataset(this._withUniqueId(id), {
-      location: "EU"
+      location: "EU",
     });
     this._cleanUpStack.addOperation(async () => {
       this.deleteDataset(id);
@@ -40,7 +40,7 @@ class IsolatedBigQuery {
       .dataset(this._withUniqueId(datasetId))
       .createTable(tableId, {
         schema: templateTable.metadata.schema,
-        location: "EU"
+        location: "EU",
       });
   }
 
@@ -56,7 +56,7 @@ class IsolatedBigQuery {
     const options = {
       query,
       location: "EU",
-      defaultDataset: { datasetId: this._withUniqueId(datasetId) }
+      defaultDataset: { datasetId: this._withUniqueId(datasetId) },
     };
     const [job] = await this._bigQuery.createQueryJob(options);
     const [rows] = await job.getQueryResults();
