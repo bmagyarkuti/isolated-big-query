@@ -1,6 +1,7 @@
 const { BigQuery } = require("@google-cloud/bigquery");
 const OpsStack = require("./ops-stack/ops-stack");
 const { v4 } = require("uuid");
+const sleep = require("./sleep/sleep");
 
 class IsolatedTestCase {
   constructor() {
@@ -52,6 +53,7 @@ class IsolatedTestCase {
       .dataset(this._withUniqueId(datasetId))
       .table(tableId)
       .insert(rows);
+    await sleep(1000);
   }
 
   async runQuery(query, datasetId) {
