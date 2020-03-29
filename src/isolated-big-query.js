@@ -3,7 +3,7 @@ const OpsStack = require("./ops-stack/ops-stack");
 const { v4 } = require("uuid");
 const sleep = require("./sleep/sleep");
 
-class IsolatedTestCase {
+class IsolatedBigQuery {
   constructor() {
     this._bigQuery = new BigQuery();
     this._uuid = v4();
@@ -77,4 +77,4 @@ class IsolatedTestCase {
   }
 }
 
-module.exports = IsolatedTestCase;
+module.exports = IsolatedBigQuery;
