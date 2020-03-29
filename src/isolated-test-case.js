@@ -10,18 +10,7 @@ class IsolatedTestCase {
   }
 
   getUuid() {
-    return this._uuid;
-  }
-
-  async runQuery(query, datasetId) {
-    const options = {
-      query,
-      location: "EU",
-      defaultDataset: { datasetId: this._withUniqueId(datasetId) }
-    };
-    const [job] = await this._bigQuery.createQueryJob(options);
-    const [rows] = await job.getQueryResults();
-    return rows.reduce((rows, row) => [...rows, row], []);
+    return this._withUniqueId("");
   }
 
   async createDataset(id) {
@@ -39,7 +28,7 @@ class IsolatedTestCase {
       .delete({ force: true });
   }
 
-  async createTableUsingTemplate(
+  async createTableFromTemplate(
     tableId,
     datasetId,
     templateTableId,
@@ -63,6 +52,17 @@ class IsolatedTestCase {
       .dataset(this._withUniqueId(datasetId))
       .table(tableId)
       .insert(rows);
+  }
+
+  async runQuery(query, datasetId) {
+    const options = {
+      query,
+      location: "EU",
+      defaultDataset: { datasetId: this._withUniqueId(datasetId) }
+    };
+    const [job] = await this._bigQuery.createQueryJob(options);
+    const [rows] = await job.getQueryResults();
+    return rows.reduce((rows, row) => [...rows, row], []);
   }
 
   async cleanUp() {
