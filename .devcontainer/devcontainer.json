@@ -7,10 +7,11 @@
     "terminal.integrated.shell.linux": "/bin/bash"
   },
   "extensions": [
-    "dbaeumer.vscode-eslint",
-    "ms-azuretools.vscode-docker",
-    "esbenp.prettier-vscode"
-  ]
+	"dbaeumer.vscode-eslint",
+	"ms-azuretools.vscode-docker",
+	"esbenp.prettier-vscode",
+	"donjayamanne.githistory"
+]
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
   // Use 'postCreateCommand' to run commands after the container is created.
