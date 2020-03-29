@@ -29,11 +29,13 @@ it("creates, populates and queries", async () => {
     "purchases",
     "templates"
   );
-  await isolatedBigQuery.populateTable("test_table", "test_dataset", [row]);
+  await isolatedBigQuery.populateTable("test_table", "test_dataset", [
+    { some: "field" },
+  ]);
 
   const query = "SELECT * FROM test_table";
   const result = await isolatedBigQuery.runQuery(query, "test_dataset");
-  expect(result).toEqual([row]);
+  expect(result).toEqual([{ some: "field" }]);
 });
 ```
 
