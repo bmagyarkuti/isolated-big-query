@@ -1,12 +1,10 @@
 {
-  "name": "bq-test-driver",
+  "name": "@bmagyarkuti/isolated-big-query",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "jest"
   },
-  "author": "",
+  "author": "Barna Magyarkuti",
   "license": "ISC",
   "devDependencies": {
     "@types/config": "0.0.36",
