@@ -10,10 +10,6 @@ class IsolatedBigQuery {
     this._cleanUpStack = new OpsStack();
   }
 
-  getUuid() {
-    return this._withUniqueId("");
-  }
-
   async createDataset(id) {
     await this._bigQuery.createDataset(this._withUniqueId(id), {
       location: "EU"
